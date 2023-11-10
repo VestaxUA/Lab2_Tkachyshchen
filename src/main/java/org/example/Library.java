@@ -16,11 +16,22 @@ class Library implements IManageable {
     }
 
     void lendItem(Patron patron, Item item) {
-        // Implementation of lending item to a patron
+        if (item.isBorrowed()) {
+            patron.borrow(item);
+            item.borrowItem();
+        } else {
+            System.out.println("Item is already borrowed.");
+        }
     }
 
     void returnItem(Patron patron, Item item) {
-        // Implementation of returning a borrowed item
+        if (patron.getBorrowedItems().contains(item)) {
+            patron.returnItem(item);
+            item.returnItem();
+        } else {
+            System.out.println("Patron did not borrow this item.");
+        }
+
     }
 
     @Override
@@ -35,11 +46,21 @@ class Library implements IManageable {
 
     @Override
     public void listAvailable() {
-        // Implementation of listing available items
+        System.out.println("Available Items:");
+        for (Item item : items) {
+            if (item.isBorrowed()) {
+                System.out.println(item.getTitle());
+            }
+        }
     }
 
     @Override
     public void listBorrowed() {
-        // Implementation of listing borrowed items
+        System.out.println("Borrowed Items:");
+        for (Patron patron : patrons) {
+            for (Item item : patron.getBorrowedItems()) {
+                System.out.println(patron.getName() + " - " + item.getTitle());
+            }
+        }
     }
 }
