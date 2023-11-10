@@ -1,5 +1,7 @@
 package org.example;
 
+import java.util.ArrayList;
+import java.util.List;
 abstract class Item {
     String title;
     String uniqueID;
