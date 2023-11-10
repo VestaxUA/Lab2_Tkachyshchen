@@ -1,11 +1,11 @@
 package org.example;
 
-class Book extends Item {
-    String author;
+class DVD extends Item {
+    int duration;
 
-    Book(String title, String uniqueID, String author) {
+    DVD(String title, String uniqueID, int duration) {
         super(title, uniqueID);
-        this.author = author;
+        this.duration = duration;
     }
 
     @Override
