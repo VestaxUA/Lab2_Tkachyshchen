@@ -40,6 +40,8 @@ public class Main {
         library.lendItem(patron3, book4);
         library.lendItem(patron4, dvd3);
 
+        library.returnItem(patron2, dvd2);
+
         library.listAvailable();
         library.listBorrowed();
     }
