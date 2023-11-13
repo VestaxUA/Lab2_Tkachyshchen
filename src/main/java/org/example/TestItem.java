@@ -4,19 +4,19 @@ import org.junit.jupiter.api.Assertions;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 public class TestItem {
-    @org.junit.jupiter.api.Test
+    @Test
     void getTitle() {
         Item item = new Book("Sample Book", "B001", "Sample Author");
         Assertions.assertEquals("Sample Book", item.getTitle());
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void getUniqueID() {
         Item item = new Book("Sample Book", "B001", "Sample Author");
         Assertions.assertEquals("B001", item.getUniqueID());
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void isBorrowed() {
         Library library = new Library();
         Patron patron1 = new Patron("Alice", "P001");
