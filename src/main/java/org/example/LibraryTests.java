@@ -3,7 +3,7 @@ package org.example;
 import org.junit.jupiter.api.Assertions;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-public class LibraryClass {
+public class LibraryTests {
    private Library library;
     private Book book1;
     private Book book2;
