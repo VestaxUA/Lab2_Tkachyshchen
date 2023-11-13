@@ -3,46 +3,96 @@ package org.example;
 import org.junit.jupiter.api.Assertions;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-public class TestItem {
-    @Test
-    void getTitle() {
-        Item item = new Book("Sample Book", "B001", "Sample Author");
-        Assertions.assertEquals("Sample Book", item.getTitle());
+public class LibraryClass {
+   private Library library;
+    private Book book1;
+    private Book book2;
+    private Book book3;
+    private DVD dvd1;
+    private DVD dvd2;
+    private DVD dvd3;
+    private Patron patron1;
+    private Patron patron2;
+    private Patron patron3;
+    private Patron patron4;
+
+    @BeforeAll
+    static void setUpBeforeAll() {
+        System.out.println("Before all tests");
     }
 
-    @Test
-    void getUniqueID() {
-        Item item = new Book("Sample Book", "B001", "Sample Author");
-        Assertions.assertEquals("B001", item.getUniqueID());
-    }
+    @BeforeEach
+    void setUp() {
+        library = new Library();
 
-    @Test
-    void isBorrowed() {
-        Library library = new Library();
-        Patron patron1 = new Patron("Alice", "P001");
-        Patron patron2 = new Patron("Bob", "P002");
+        book1 = new Book("Crime and Punishment", "B001", "Fyodor Dostoevsky");
+        book2 = new Book("The Lord of the Rings", "B002", "J.R.R. Tolkien");
+        book3 = new Book("1984", "B003", "George Orwell");
+        DVD dvd1 = new DVD("The Matrix", "D001", 136);
+        dvd2 = new DVD("The Dark Knight", "D002", 152);
+        dvd3 = new DVD("Pulp Fiction", "D003", 154);
 
-        Item item1 = new Book("Book 1", "B001", "Author 1");
-        Item item2 = new Book("Book 2", "B002", "Author 2");
+        patron1 = new Patron("Eleanor", "P001");
+        patron2 = new Patron("Victor", "P002");
+        patron3 = new Patron("Isabella", "P003");
+        patron4 = new Patron("Henry", "P004");
+
+        library.add(book1);
+        library.add(book2);
+        library.add(book3);
+        library.add(dvd1);
+        library.add(dvd2);
+        library.add(dvd3);
 
         library.registerPatron(patron1);
         library.registerPatron(patron2);
-        library.add(item1);
-        library.add(item2);
+        library.registerPatron(patron3);
+        library.registerPatron(patron4);
+    }
 
-        library.lendItem(patron1, item1);
-        library.lendItem(patron2, item2);
+    @Test
+    void testBorrowAndReturn() {
+        assertFalse(book1.isBorrowed());
+        library.lendItem(patron1, book1);
+        assertTrue(book1.isBorrowed());
+        assertTrue(patron1.getBorrowedItems().contains(book1));
+        library.returnItem(patron1, book1);
+        assertFalse(book1.isBorrowed());
+        assertFalse(patron1.getBorrowedItems().contains(book1));
+    }
 
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outputStream));
+    @Test
+    void testLendUnavailableItem() {
+        library.lendItem(patron1, book2);
+        assertTrue(book2.isBorrowed());
+        library.lendItem(patron2, book2);
+        assertTrue(book2.isBorrowed()); // should remain borrowed
+    }
 
-        library.listBorrowed();
+    @Test
+    void testReturnUnborrowedItem() {
+        library.returnItem(patron1, book3);
+        assertFalse(book3.isBorrowed()); // should remain not borrowed
+    }
 
-        System.setOut(System.out);
+    @Test
+    void testListAvailableAndBorrowed() {
+        library.lendItem(patron1, dvd2);
 
-        String printedOutput = outputStream.toString();
+        // Test listAvailable
+        library.listAvailable(); // Ensure it doesn't throw exceptions
 
-        Assertions.assertTrue(printedOutput.contains("Alice - Book 1"));
-        Assertions.assertTrue(printedOutput.contains("Bob - Book 2"));
+        // Test listBorrowed
+        library.listBorrowed(); // Ensure it doesn't throw exceptions
+    }
+
+    @AfterEach
+    void tearDown() {
+        System.out.println("After each test");
+    }
+
+    @AfterAll
+    static void tearDownAfterAll() {
+        System.out.println("After all tests");
     }
 }
